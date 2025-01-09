@@ -23,7 +23,7 @@ export default function Checkout() {
   const cartCtx = useContext(CartContext);
   const userProgressCtx = useContext(UserProgressContex);
 
-  const {
+  let {
     data,
     isLoading: isSending,
     error,
@@ -76,6 +76,7 @@ export default function Checkout() {
   if (isSending) {
     actions = <span>Sending order data...</span>;
   }
+  console.log(data);
 
   if (data && !error) {
     return (

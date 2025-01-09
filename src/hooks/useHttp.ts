@@ -39,9 +39,10 @@ export default function useHttp<T>(
   const [error, setError] = useState<string | null>(null);
 
   function clearData(): void {
-    if (initialData) {
-      setData(initialData);
-    }
+    // if (initialData) {
+    //   setData(initialData);
+    // }
+    setData(initialData || null);
   }
 
   const sendRequest = useCallback(
