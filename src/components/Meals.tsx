@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import MealItem from "./MealItem";
 import useHttp from "../hooks/useHttp";
-import Error from "../components/UI/Error";
+import Error from "./UI/Error";
+import { MealType } from "../components/types/item";
 
 const API = "http://localhost:3000";
 
@@ -13,7 +14,7 @@ export default function Meals() {
     isLoading,
     error,
     sendRequest,
-  } = useHttp(`${API}/meals`, requestConfig, []);
+  } = useHttp<MealType[]>(`${API}/meals`, requestConfig, []);
   // const [loadedMeals, setLoadedMeals] = useState([]);
   // const [loading, setLoading] = useState(true);
 
@@ -39,6 +40,10 @@ export default function Meals() {
   // }, []);
   if (error) {
     return <Error title="Failed to fetch meals" message={error} />;
+  }
+
+  if (!loadedMeals) {
+    return;
   }
 
   return (

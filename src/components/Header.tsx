@@ -4,7 +4,7 @@ import CartContext from "../store/CartContex";
 import { useContext } from "react";
 import UserProgressContex from "../store/UserProgressContex";
 
-export default function Header(props) {
+export default function Header() {
   const cartCtx = useContext(CartContext);
   const totalCartItems = cartCtx.items.reduce((totalNumber, item) => {
     return totalNumber + item.quantity;

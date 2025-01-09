@@ -2,10 +2,11 @@ import { currencyFormatter } from "../util/formatting";
 import Button from "./UI/Button";
 import CartContext from "../store/CartContex";
 import { useContext } from "react";
+import { MealType, CartItemType } from "../components/types/item";
 
 const API = "http://localhost:3000";
 
-export default function MealItem({ meal }) {
+export default function MealItem({ meal }: { meal: MealType }) {
   const cartCtx = useContext(CartContext);
 
   function handleAddMealToCart() {

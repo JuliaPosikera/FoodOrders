@@ -11,18 +11,24 @@
     "start": "concurrently \"cd src && npm run dev\" \"cd backend && node app.js\""
   },
   "dependencies": {
-    "react": "^19.1.0-canary-3ce77d55-20250106",
-    "react-dom": "^19.1.0-canary-3ce77d55-20250106"
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/material": "^6.3.1",
+    "@mui/styled-engine-sc": "^6.3.1",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "styled-components": "^6.1.14"
   },
   "devDependencies": {
-    "@types/react": "^18.2.15",
-    "@types/react-dom": "^18.2.7",
+    "@types/react": "^19.0.4",
+    "@types/react-dom": "19.0.2",
     "@vitejs/plugin-react": "^4.0.3",
     "concurrently": "^9.1.2",
     "eslint": "^8.45.0",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
+    "typescript": "^5.7.2",
     "vite": "^4.4.5"
   }
 }

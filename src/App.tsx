@@ -1,3 +1,4 @@
+import React from "react";
 import Cart from "./components/Cart";
 import Checkout from "./components/Checkout";
 import Header from "./components/Header";

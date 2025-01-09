@@ -1,18 +1,23 @@
 import Modal from "./UI/Modal";
-import { useContext, useActionState } from "react";
+import { useContext } from "react";
 import CartContext from "../store/CartContex";
 import UserProgressContex from "../store/UserProgressContex";
 import { currencyFormatter } from "../util/formatting";
 import Input from "./UI/Input";
 import Button from "./UI/Button";
 import useHttp from "../hooks/useHttp";
-import Error from "../components/UI/Error";
+import Error from "./UI/Error";
+import { Customer } from "./types/customer";
+import { CartItemType } from "./types/item";
 
 const API = "http://localhost:3000";
+
 const requestConfig = {
   method: "POST",
   headers: { "Content-Type": "application/json" },
 };
+
+// type Order = { items: CartItemType[]; customer: Customer };
 
 export default function Checkout() {
   const cartCtx = useContext(CartContext);
@@ -20,7 +25,7 @@ export default function Checkout() {
 
   const {
     data,
-    // isLoading: isSending,
+    isLoading: isSending,
     error,
     sendRequest,
     clearData,
@@ -33,13 +38,16 @@ export default function Checkout() {
   function handleClose() {
     userProgressCtx.hideCheckout();
   }
+
   function handleFinish() {
     userProgressCtx.hideCheckout();
     cartCtx.clearCart();
     clearData();
   }
-  async function checkoutAction(previousState, fd) {
-    "use server";
+  async function checkoutAction(event: any) {
+    event.preventDefault();
+
+    const fd = new FormData(event.target);
     const customerData = Object.fromEntries(fd.entries());
     await sendRequest(
       JSON.stringify({
@@ -56,7 +64,6 @@ export default function Checkout() {
     //     });
   }
 
-  const [state, formAction, isSending] = useActionState(checkoutAction, null);
   let actions = (
     <>
       <Button textOnly onClick={handleClose}>
@@ -67,7 +74,6 @@ export default function Checkout() {
   );
 
   if (isSending) {
-    console.log("Sending order data...");
     actions = <span>Sending order data...</span>;
   }
 
@@ -89,7 +95,7 @@ export default function Checkout() {
 
   return (
     <Modal open={userProgressCtx.progress === "checkout"} onClose={handleClose}>
-      <form action={formAction}>
+      <form onSubmit={checkoutAction}>
         <h2>Checkout</h2>
         <p>total Amount: {currencyFormatter.format(cartTotal)}</p>
         <Input label="Full Name" type="text" id="name" />

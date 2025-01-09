@@ -5,6 +5,7 @@ import { currencyFormatter } from "../util/formatting";
 import Button from "./UI/Button";
 import UserProgressContex from "../store/UserProgressContex";
 import CartItem from "./CartItem";
+import { CartItemType } from "../components/types/item";
 
 export default function Cart() {
   const cartCtx = useContext(CartContext);
@@ -25,7 +26,9 @@ export default function Cart() {
     <Modal
       className="cart"
       open={userProgressCtx.progress === "cart"}
-      onClose={userProgressCtx.progress === "cart" ? handleCloseCart : null}
+      onClose={
+        userProgressCtx.progress === "cart" ? handleCloseCart : undefined
+      }
     >
       <h2>Your cart</h2>
       <ul>
