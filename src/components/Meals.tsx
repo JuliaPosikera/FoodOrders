@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
 import MealItem from "./MealItem";
 import useHttp from "../hooks/useHttp";
 import Error from "./UI/Error";
 import { MealType } from "../components/types/item";
-
+import Grid from "@mui/material/Grid2";
+import Paper from "@mui/material/Paper";
+import Box from "@mui/material/Box";
 const API = "http://localhost:3000";
 
 const requestConfig = {};
@@ -15,29 +16,7 @@ export default function Meals() {
     error,
     sendRequest,
   } = useHttp<MealType[]>(`${API}/meals`, requestConfig, []);
-  // const [loadedMeals, setLoadedMeals] = useState([]);
-  // const [loading, setLoading] = useState(true);
 
-  // async function fetchMeals() {
-  //   try {
-  //     const response = await fetch(`${API}/meals`);
-
-  //     if (!response.ok) {
-  //       throw new Error("Failed to fetch meals");
-  //     }
-
-  //     const meals = await response.json();
-  //     setLoadedMeals(meals);
-  //     setLoading(false);
-  //   } catch (error) {
-  //     console.error("Error fetching meals:", error.message);
-  //     setLoading(false);
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   fetchMeals();
-  // }, []);
   if (error) {
     return <Error title="Failed to fetch meals" message={error} />;
   }
@@ -47,12 +26,34 @@ export default function Meals() {
   }
 
   return (
-    <ul id="meals">
-      {isLoading ? (
-        <p className="center">"LOADING MEALS... "</p>
-      ) : (
-        loadedMeals.map((meal) => <MealItem key={meal.id} meal={meal} />)
-      )}
-    </ul>
+    <Box sx={{ flexGrow: 1 }}>
+      <Grid
+        flexDirection={{ xs: "column", sm: "row" }}
+        container
+        spacing={{ xs: 2, md: 3 }}
+        rowSpacing={1}
+        columns={{ xs: 4, sm: 8, md: 12 }}
+        justifyContent="center"
+        alignItems="center"
+      >
+        {isLoading ? (
+          <Grid size="grow">
+            <Paper
+              sx={{
+                textAlign: "center",
+              }}
+            >
+              LOADING MEALS...
+            </Paper>
+          </Grid>
+        ) : (
+          loadedMeals.map((meal) => (
+            <Grid key={meal.id} size={{ xs: 2, sm: 3, md: 4 }}>
+              <MealItem meal={meal} />
+            </Grid>
+          ))
+        )}
+      </Grid>
+    </Box>
   );
 }

@@ -1,14 +1,22 @@
-import Modal from "./UI/Modal";
+// import Modal from "./UI/Modal";
 import { useContext } from "react";
 import CartContext from "../store/CartContex";
 import UserProgressContex from "../store/UserProgressContex";
 import { currencyFormatter } from "../util/formatting";
-import Input from "./UI/Input";
-import Button from "./UI/Button";
+// import Input from "./UI/Input";
+// import Button from "./UI/Button";
 import useHttp from "../hooks/useHttp";
 import Error from "./UI/Error";
-import { Customer } from "./types/customer";
-import { CartItemType } from "./types/item";
+import InputAdornment from "@mui/material/InputAdornment";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import {
+  Typography,
+  Box,
+  Button,
+  TextField,
+  Modal,
+  FormControl,
+} from "@mui/material";
 
 const API = "http://localhost:3000";
 
@@ -66,17 +74,16 @@ export default function Checkout() {
 
   let actions = (
     <>
-      <Button textOnly onClick={handleClose}>
+      <Button variant="text" onClick={handleClose}>
         Close
       </Button>
-      <Button>Submit Order</Button>
+      <Button variant="contained">Submit Order</Button>
     </>
   );
 
   if (isSending) {
     actions = <span>Sending order data...</span>;
   }
-  console.log(data);
 
   if (data && !error) {
     return (
@@ -84,31 +91,110 @@ export default function Checkout() {
         open={userProgressCtx.progress === "checkout"}
         onClose={handleFinish}
       >
-        <h2>Success!</h2>
-        <p>Your order was submitted successfully.</p>
-        <p>We will call you within next few minutes</p>
-        <p className="modal-actions">
-          <Button onClick={handleFinish}>Okey</Button>
-        </p>
+        <Box>
+          <Typography variant="h4">Success!</Typography>
+          <Typography>Your order was submitted successfully.</Typography>
+          <Typography>We will call you within next few minutes</Typography>
+          <Typography className="modal-actions">
+            <Button onClick={handleFinish}>Okey</Button>
+          </Typography>
+        </Box>
       </Modal>
     );
   }
 
   return (
-    <Modal open={userProgressCtx.progress === "checkout"} onClose={handleClose}>
-      <form onSubmit={checkoutAction}>
-        <h2>Checkout</h2>
-        <p>total Amount: {currencyFormatter.format(cartTotal)}</p>
-        <Input label="Full Name" type="text" id="name" />
-        <Input label="E-Mail " type="email" id="email" />
-        <Input label="Street " type="text" id="street" />
-        <div className="control-row">
-          <Input label="Postal Code" type="text" id="postal-code" />
-          <Input label="City " type="text" id="city" />
-        </div>
-        {error && <Error title="Failed submit Order!" message={error} />}
-        <p className="modal-actions"> {actions}</p>
-      </form>
+    <Modal
+      open={userProgressCtx.progress === "checkout"}
+      onClose={handleClose}
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Box
+        sx={{
+          bgcolor: "background.paper",
+          boxShadow: 24,
+          padding: 4,
+          borderRadius: 2,
+          width: "90%",
+          maxWidth: 600,
+        }}
+      >
+        <FormControl component="form" onSubmit={checkoutAction} fullWidth>
+          <Typography variant="h3" color="textPrimary" gutterBottom>
+            Checkout
+          </Typography>
+          <Typography gutterBottom>
+            Total Amount: {currencyFormatter.format(cartTotal)}
+          </Typography>
+          <TextField
+            variant="standard"
+            label="Full Name"
+            id="name"
+            fullWidth
+            slotProps={{ inputLabel: { sx: { color: "text.secondary" } } }}
+          />
+          <TextField
+            variant="standard"
+            label="E-Mail"
+            id="email"
+            fullWidth
+            sx={{
+              marginTop: 2,
+            }}
+            slotProps={{ inputLabel: { sx: { color: "text.secondary" } } }}
+          />
+          <TextField
+            variant="standard"
+            label="Street"
+            id="street"
+            fullWidth
+            sx={{
+              marginTop: 2,
+            }}
+            slotProps={{ inputLabel: { sx: { color: "text.secondary" } } }}
+          />
+          <Box sx={{ display: "flex", gap: 2, marginTop: 2 }}>
+            <TextField
+              label="Postal Code"
+              type="text"
+              id="postal-code"
+              fullWidth
+              slotProps={{ inputLabel: { sx: { color: "text.secondary" } } }}
+            />
+            <TextField
+              label="City"
+              type="text"
+              id="city"
+              fullWidth
+              slotProps={{ inputLabel: { sx: { color: "text.secondary" } } }}
+            />
+          </Box>
+          {error && (
+            <Typography
+              color="error"
+              sx={{ marginTop: 2, textAlign: "center" }}
+            >
+              Failed to submit order! {error}
+            </Typography>
+          )}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+              marginTop: 3,
+            }}
+          >
+            <Button variant="text" onClick={handleClose}>
+              Close
+            </Button>
+            <Button variant="contained">Submit Order</Button>
+          </Box>
+        </FormControl>
+      </Box>
     </Modal>
   );
 }

@@ -15,7 +15,7 @@ type ContextProviderProps = {
 type CartContextInterface = {
   items: CartItemType[];
   addItem: (item: MealType) => void;
-  removeItem: (id: string) => void;
+  removeItem: (id: string, quantity: number) => void;
   clearCart: () => void;
 };
 
@@ -27,6 +27,7 @@ type AddItemAction = {
 type RemoveItemAction = {
   type: ActionTypes.REMOVE_ITEM;
   id: string;
+  quantity: number;
 };
 
 type ClearCartAction = {
@@ -38,7 +39,7 @@ const initialStateItems: CartItemType[] = [];
 const CartContext = createContext({
   items: initialStateItems,
   addItem: (item: MealType) => {},
-  removeItem: (id: string) => {},
+  removeItem: (id: string, quantity: number) => {},
   clearCart: () => {},
 });
 
@@ -73,7 +74,10 @@ function cartReducer(state: State, action: Actions) {
 
     const updatedItems = [...state.items];
 
-    if (existingCartItem.quantity === 1) {
+    if (
+      existingCartItem.quantity === 1 ||
+      existingCartItem.quantity === action.quantity
+    ) {
       updatedItems.splice(existingCartItemIndex, 1);
     } else {
       const updatedItem = {
@@ -98,8 +102,8 @@ export function CartContextProvider({ children }: ContextProviderProps) {
   function addItem(item: MealType) {
     dispatchCartAction({ type: ActionTypes.ADD_ITEM, item });
   }
-  function removeItem(id: string) {
-    dispatchCartAction({ type: ActionTypes.REMOVE_ITEM, id });
+  function removeItem(id: string, quantity: number) {
+    dispatchCartAction({ type: ActionTypes.REMOVE_ITEM, id, quantity });
   }
 
   function clearCart() {
